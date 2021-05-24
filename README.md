@@ -13,9 +13,12 @@
   function open() {
     visible = true;
   }
+  function close() {
+    visible = false;
+  }
 </script>
 
-<Fence modal bind:visible>
+<Fence modal bind:visible on:cancel={close}>
   <h1>It works.</h1>
 </Fence>
 
