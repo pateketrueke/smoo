@@ -1,0 +1,60 @@
+{
+  "name": "smoo",
+  "version": "0.0.0",
+  "description": "Simple Modal or Outlet",
+  "main": "dist/smoo.js",
+  "svelte": "src/main.js",
+  "module": "dist/smoo.es.js",
+  "unpkg": "dist/smoo.min.js",
+  "browser": "dist/smoo.min.js",
+  "files": [
+    "src/**",
+    "dist/*"
+  ],
+  "scripts": {
+    "dev": "rollup -c -w",
+    "build": "rollup -c",
+    "serve": "sirv docs --dev --quiet --single --port 8080",
+    "lint": "eslint src e2e",
+    "prepublishOnly": "NODE_ENV=production npm run build",
+    "pretest": "npm run lint && NODE_ENV=test npm run build",
+    "test": "npm run test:e2e -- ${BROWSER:-chrome:headless} -a 'npm run serve' e2e/cases",
+    "test:e2e": "BASE_URL=http://localhost:8080 testcafe"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pateketrueke/smoo.git"
+  },
+  "author": "Alvaro Cabrera <pateketrueke@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "svelte",
+    "fetchql",
+    "graphql",
+    "svelte-graphql",
+    "svelte3-graphql"
+  ],
+  "peerDependencies": {
+    "svelte": "3.x"
+  },
+  "devDependencies": {
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-svelte3": "^3.2.0",
+    "eslint-utils": ">=1.4.1",
+    "minimist": ">=1.2.2",
+    "rollup": "^2.8.2",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-svelte": "^7.1.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "serialize-javascript": ">=2.1.1",
+    "sirv-cli": "^1.0.8",
+    "svelte": "^3.38.2",
+    "testcafe": "^1.5.0"
+  },
+  "dependencies": {
+    "fetchql": "^3.0.0"
+  }
+}
