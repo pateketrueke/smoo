@@ -8,7 +8,10 @@ function url(x = '') {
 
 const h3 = Selector('h3');
 const h4 = Selector('h4');
+const pre = Selector('pre');
+const input = Selector('input');
 const button = Selector('button');
+const menuItem = Selector('li[role=menuitem]');
 
 fixture('smoo')
   .page(url());
@@ -33,4 +36,28 @@ test('it handle modals', async t => {
     .expect(h4.count).eql(1)
     .expect(h4.textContent)
     .contains('Sub modal');
+});
+
+test('it handle search input', async t => {
+  await t
+    .expect(pre.textContent)
+    .contains('Got: []');
+
+  await t
+    .expect(menuItem.count).eql(2)
+    .expect(menuItem.visible).notOk()
+    .click(input);
+
+  await t
+    .expect(menuItem.count).eql(2)
+    .typeText(input, 'do', { replace: true });
+
+  await t
+    .expect(menuItem.visible).ok()
+    .expect(menuItem.count).eql(1);
+
+  await t
+    .click(Selector('#search-id-1'))
+    .expect(pre.textContent)
+    .contains('Got: [1]');
 });
