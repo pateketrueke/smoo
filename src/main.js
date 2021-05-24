@@ -1,1 +1,1 @@
-export { default as Fence } from './Fence.svelte';
+export { default as Fence } from './components/Fence.svelte';

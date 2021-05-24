@@ -24,13 +24,13 @@ test('it just works...', async t => {
     .contains('It works.');
 });
 
-test('it handle nested modals', async t => {
+test('it handle modals', async t => {
   await t
     .click(button.withText('Open modal'))
     .click(button.withText('nested'));
 
-    await t
-      .expect(h4.count).eql(1)
-      .expect(h4.textContent)
-      .contains('Sub modal');
+  await t
+    .expect(h4.count).eql(1)
+    .expect(h4.textContent)
+    .contains('Sub modal');
 });

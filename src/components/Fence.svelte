@@ -121,7 +121,7 @@
   }
 
   $: fixedClass = modal ? 'overlay' : 'inline';
-  $: fixedProps = { ...(id ? { id } : null), class: cssClass };
+  $: fixedProps = { ...(id ? { id } : null), class: cssClass || null };
 </script>
 
 <style>
@@ -130,6 +130,7 @@
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: 1;
     display: flex;
     position: fixed;
     align-items: center;
