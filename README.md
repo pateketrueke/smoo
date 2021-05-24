@@ -35,7 +35,8 @@
 
 ## How it works?
 
-`smoo` lets you place any kind of markup or components inside a `<div role="dialog">...</div>`
+`smoo` lets you place any kind of markup or components inside a `<div role="dialog">...</div>`,
+it also brings to you many other useful components, you'll see below.
 
 ## Components
 
