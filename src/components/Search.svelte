@@ -2,6 +2,7 @@
   import { createEventDispatcher } from 'svelte';
 
   let cssClass = '';
+  let isBlocked = false;
   let isFocus = false;
   let isOpen = null;
   let term = '';
@@ -23,12 +24,22 @@
 
   const dispatch = createEventDispatcher();
 
+  function isActive() {
+    return document.activeElement === input;
+  }
+
+  function isOption() {
+    return list.contains(document.activeElement);
+  }
+
   function search(e) {
     term = e.target.value.toLowerCase();
   }
 
   function sync(e) {
+    search(e);
     dispatch('input', e.target.value);
+    isOpen = e.target.value.length > 0 || null;
   }
 
   function pick(rowId) {
@@ -41,16 +52,32 @@
     dispatch('change', value);
   }
 
+  function reset(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    isOpen = null;
+    input.focus();
+  }
+
+  function select(e) {
+    pick(e.target.value);
+    if (!multiple && !isBlocked) {
+      setTimeout(() => reset(e), 60);
+    }
+  }
+
   function open() {
     isOpen = true;
   }
 
   let t;
   function close() {
+    isBlocked = true;
     clearTimeout(t);
     t = setTimeout(() => {
-      if (document.activeElement === input) return;
-      if (!isFocus && list && !list.contains(document.activeElement)) isOpen = null;
+      isBlocked = false;
+      if (isActive()) return;
+      if (!isFocus && list && !isOption()) isOpen = null;
     }, 60);
   }
 
@@ -62,20 +89,30 @@
     isFocus = false;
   }
 
-  function check(e) {
-    if (e.keyCode === 13) {
-      if (list && list.contains(document.activeElement)) {
-        e.stopPropagation();
-        e.preventDefault();
-        input.blur();
-      }
+  function focus(el) {
+    const target = el && el.querySelector('input');
+    if (target) {
+      target.focus();
+      if (!multiple) target.click();
     }
-    if (e.keyCode === 27) {
-      if (list && list.contains(document.activeElement)) {
-        e.stopPropagation();
-        e.preventDefault();
-        input.focus();
+  }
+
+  function check(e) {
+    if (!isOpen) {
+      if (e.keyCode === 38 || e.keyCode === 40) {
+        isOpen = true;
       }
+    } else {
+      if (e.keyCode === 13) reset(e);
+      if (e.keyCode === 38 && isActive()) {
+        e.preventDefault();
+        focus(list.querySelector('li:last-child'));
+      }
+      if (e.keyCode === 40 && isActive()) {
+        e.preventDefault();
+        focus(list.querySelector('li:first-child'));
+      }
+      if (e.keyCode === 27 && list && isOption()) reset(e);
     }
   }
 
@@ -90,6 +127,7 @@
 <style>
   .search { position: relative; }
   .values {
+    transform: translateY(-1px);
     list-style-type: none;
     background-color: white;
     border: 1px solid silver;
@@ -109,19 +147,19 @@
 <div role="listbox" class="search" on:keydown={check}>
   <label for={id} role="search" class="input">
     <slot name="before" />
-    <input type="search" class="field" {disabled} {placeholder} {...fixedProps} bind:this={input} on:keyup={search} on:change={search} on:input={sync} on:focus={open} on:blur={close} />
+    <input type="search" class="field" {disabled} {placeholder} {...fixedProps} bind:this={input} on:keyup={search} on:change={search} on:input={sync} on:blur={close} on:click={open} />
     <slot name="after" />
   </label>
   <ul role="menu" class="values" open={isOpen} bind:this={list} on:mouseenter={set} on:mouseleave={unset}>
     {#each filteredData as item}
       <li role="menuitem" class="option">
         <label for="{id}-{pk}-{item[pk]}">
-          <input id="{id}-{pk}-{item[pk]}" type={fixedType} checked={value.includes(item[pk])} on:change={() => pick(item[pk])} on:blur={close} />
+          <input id="{id}-{pk}-{item[pk]}" type={fixedType} value={item[pk]} checked={value.includes(item[pk].toString())} on:change={select} on:blur={close} />
           <slot {item} name="item"><span class="value">{item[label]}</span></slot>
         </label>
       </li>
     {:else}
-      <li><slot name="empty">{fallback}</slot></li>
+      <li class="empty"><slot name="empty">{fallback}</slot></li>
     {/each}
   </ul>
 </div>

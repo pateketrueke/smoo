@@ -7,9 +7,18 @@
   ];
 
   let members = [];
+  let multiple = false;
+
+  function toggle(e) {
+    multiple = e.target.checked;
+  }
 </script>
 
-<Search multiple data={users} bind:value={members}>
+<label>
+  <input type="checkbox" on:change={toggle} />
+  Multiple?
+</label>
+<Search {multiple} data={users} bind:value={members}>
   <span slot="item" let:item>
     {item.name}<br /><small>{item.value}</small>
   </span>

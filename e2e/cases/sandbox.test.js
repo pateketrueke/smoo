@@ -9,7 +9,8 @@ function url(x = '') {
 const h3 = Selector('h3');
 const h4 = Selector('h4');
 const pre = Selector('pre');
-const input = Selector('input');
+const search = Selector('input[type=search]');
+const multiple = Selector('input[type=checkbox]');
 const button = Selector('button');
 const menuItem = Selector('li[role=menuitem]');
 
@@ -46,11 +47,12 @@ test('it handle search input', async t => {
   await t
     .expect(menuItem.count).eql(2)
     .expect(menuItem.visible).notOk()
-    .click(input);
+    .click(search);
 
   await t
     .expect(menuItem.count).eql(2)
-    .typeText(input, 'do', { replace: true });
+    .expect(menuItem.visible).ok()
+    .typeText(search, 'do', { replace: true });
 
   await t
     .expect(menuItem.visible).ok()
@@ -59,5 +61,5 @@ test('it handle search input', async t => {
   await t
     .click(Selector('#search-id-1'))
     .expect(pre.textContent)
-    .contains('Got: [1]');
+    .contains('Got: ["1"]');
 });
