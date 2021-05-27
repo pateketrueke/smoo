@@ -11,6 +11,7 @@
   export { cssClass as class };
   export let value = [];
   export let data = [];
+  export let nofilter = false;
   export let disabled = false;
   export let multiple = false;
   export let label = 'name';
@@ -24,6 +25,10 @@
 
   function search(e) {
     term = e.target.value.toLowerCase();
+  }
+
+  function sync(e) {
+    dispatch('input', e.target.value);
   }
 
   function pick(rowId) {
@@ -58,6 +63,13 @@
   }
 
   function check(e) {
+    if (e.keyCode === 13) {
+      if (list && list.contains(document.activeElement)) {
+        e.stopPropagation();
+        e.preventDefault();
+        input.blur();
+      }
+    }
     if (e.keyCode === 27) {
       if (list && list.contains(document.activeElement)) {
         e.stopPropagation();
@@ -69,7 +81,7 @@
 
   $: fixedProps = { ...(id ? { id } : null), class: cssClass || null };
   $: fixedType = multiple ? 'checkbox' : 'radio';
-  $: filteredData = data.filter(item => {
+  $: filteredData = nofilter ? data : data.filter(item => {
     if (keys.some(key => item[key].toLowerCase().includes(term))) return true;
     return !term;
   });
@@ -97,7 +109,7 @@
 <div role="listbox" class="search" on:keydown={check}>
   <label for={id} role="search" class="input">
     <slot name="before" />
-    <input type="search" class="field" {disabled} {placeholder} {...fixedProps} bind:this={input} on:keyup={search} on:change={search} on:focus={open} on:blur={close} />
+    <input type="search" class="field" {disabled} {placeholder} {...fixedProps} bind:this={input} on:keyup={search} on:change={search} on:input={sync} on:focus={open} on:blur={close} />
     <slot name="after" />
   </label>
   <ul role="menu" class="values" open={isOpen} bind:this={list} on:mouseenter={set} on:mouseleave={unset}>

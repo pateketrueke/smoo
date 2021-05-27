@@ -80,7 +80,7 @@ This is an `<input type="search" />` wrapper that handle various effects:
 - It allows you to customize the data-source used and the render options
 
 > It uses _checkboxes_ or _radios_ to enable selection through the keyboard,
-> once values are choosen a `change` event is fired with the current selection.
+> once values are choosen a `change` event is fired with the current selection, a `input` event is fired on every change.
 > You can use CSS to hide those inputs and render the items by using `:focus` and `:checked` selectors.
 
 Available props:
@@ -92,6 +92,7 @@ Available props:
 - `{value}` &mdash; This is an `Array` of selected ids from the data-source, can be bound
 - `{class}` &mdash; Used `class` for the inner `<input />` element
 - `{label}` &mdash; Property used to print a human-readable value from each rendered item
+- `{nofilter}` &mdash; its presence will disable the filtering over the passed data-source
 - `{disabled}` &mdash; It just disables the `<input />` field, while disabled options are hidden
 - `{multiple}` &mdash; Enable multiple selection of values (`checkbox` vs `radio`), disabled by default
 - `{fallback}` &mdash; This message is shown when no results are found while searching
