@@ -43,7 +43,6 @@
   }
 
   function pick(rowId) {
-    if (!input || input.disabled) return;
     if (!value.includes(rowId)) {
       value = !multiple ? [rowId] : value.concat(rowId);
     } else {
