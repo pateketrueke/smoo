@@ -70,7 +70,7 @@ Available slots:
 
 > Add the `nofocus` or `data-nofocus` attribute to any element to skip autofocus on it (useful for close-icons, etc.).
 
-### `<Search {id} {pk} {keys} {data} {value} {class} {label} {disabled} {multiple} {placeholder} on:change />`
+### `<Search {id} {pk} {keys} {data} {value} {class} {label} {disabled} {multiple} {autoclose} {placeholder} on:change />`
 
 This is an `<input type="search" />` wrapper that handle various effects:
 
@@ -78,9 +78,10 @@ This is an `<input type="search" />` wrapper that handle various effects:
   - you can press <kbd>ESC</kbd> to clear search
   - on items, press <kbd>ESC</kbd> to focus back to the input
 - It allows you to customize the data-source used and the render options
+- The search input fires their `input`, `focus` and `blur` events, while the dropdown fires `open` and `close` events.
 
 > It uses _checkboxes_ or _radios_ to enable selection through the keyboard,
-> once values are choosen a `change` event is fired with the current selection, a `input` event is fired on every change.
+> once values are choosen a `change` event is fired with the current selection.
 > You can use CSS to hide those inputs and render the items by using `:focus` and `:checked` selectors.
 
 Available props:
@@ -95,6 +96,7 @@ Available props:
 - `{nofilter}` &mdash; its presence will disable the filtering over the passed data-source
 - `{disabled}` &mdash; It just disables the `<input />` field, while disabled options are hidden
 - `{multiple}` &mdash; Enable multiple selection of values (`checkbox` vs `radio`), disabled by default
+- `{autoclose}` &mdash; Close the dropdown on click-selection, it should not work with `multiple` options, disabled by default
 - `{fallback}` &mdash; This message is shown when no results are found while searching
 - `{placeholder}` &mdash; Custom `placeholder` for the `<input />` field
 

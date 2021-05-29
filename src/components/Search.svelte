@@ -15,6 +15,7 @@
   export let nofilter = false;
   export let disabled = false;
   export let multiple = false;
+  export let autoclose = false;
   export let label = 'name';
   export let fallback = 'No names were found';
   export let placeholder = 'Search for names...';
@@ -51,17 +52,19 @@
     dispatch('change', value);
   }
 
-  function reset(e) {
-    e.stopPropagation();
-    e.preventDefault();
+  function reset(e, skip) {
+    if (!skip) {
+      e.stopPropagation();
+      e.preventDefault();
+      input.focus();
+    }
     isOpen = null;
-    input.focus();
   }
 
   function select(e) {
     pick(e.target.value);
-    if (!multiple && !isBlocked) {
-      setTimeout(() => reset(e), 60);
+    if (!multiple && autoclose) {
+      setTimeout(() => !isBlocked && reset(e), 120);
     }
   }
 
@@ -70,14 +73,18 @@
   }
 
   let t;
-  function close() {
+  function close(e) {
+    dispatch('blur', e);
     isBlocked = true;
     clearTimeout(t);
     t = setTimeout(() => {
       isBlocked = false;
       if (isActive()) return;
-      if (!isFocus && list && !isOption()) isOpen = null;
-    }, 60);
+      if (!isOption() && !isFocus) {
+        dispatch('close', e);
+        isOpen = null;
+      }
+    }, 150);
   }
 
   function set() {
@@ -103,6 +110,11 @@
       }
     } else {
       if (e.keyCode === 13) reset(e);
+      if (e.keyCode === 9) {
+        setTimeout(() => {
+          if (!isOption()) reset(e, true);
+        }, 120);
+      }
       if (e.keyCode === 38 && isActive()) {
         e.preventDefault();
         focus(list.querySelector('li:last-child'));
@@ -111,7 +123,7 @@
         e.preventDefault();
         focus(list.querySelector('li:first-child'));
       }
-      if (e.keyCode === 27 && list && isOption()) reset(e);
+      if (e.keyCode === 27 && isOption()) reset(e);
     }
   }
 
@@ -121,6 +133,7 @@
     if (keys.some(key => item[key].toLowerCase().includes(term))) return true;
     return !term;
   });
+  $: if (isOpen) dispatch('open', { input, list });
 </script>
 
 <style>
@@ -146,19 +159,25 @@
 <div role="listbox" class="search" on:keydown={check}>
   <label for={id} role="search" class="input">
     <slot name="before" />
-    <input type="search" class="field" {disabled} {placeholder} {...fixedProps} bind:this={input} on:keyup={search} on:change={search} on:input={sync} on:blur={close} on:click={open} />
+    <input
+      type="search" class="field" {disabled} {placeholder} {...fixedProps}
+      bind:this={input} on:keyup={search} on:change={search} on:input={sync} on:blur={close} on:mouseup={open} on:focus
+    />
     <slot name="after" />
   </label>
   <ul role="menu" class="values" open={isOpen} bind:this={list} on:mouseenter={set} on:mouseleave={unset}>
     {#each filteredData as item}
       <li role="menuitem" class="option">
         <label for="{id}-{pk}-{item[pk]}">
-          <input id="{id}-{pk}-{item[pk]}" type={fixedType} value={item[pk]} checked={value.includes(item[pk].toString())} on:change={select} on:blur={close} />
+          <input id="{id}-{pk}-{item[pk]}"
+            type={fixedType} value={item[pk]} checked={value.includes(item[pk].toString())}
+            on:change={select} on:blur={close}
+          />
           <slot {item} name="item"><span class="value">{item[label]}</span></slot>
         </label>
       </li>
     {:else}
-      <li class="empty"><slot name="empty">{fallback}</slot></li>
+      <li class="empty" on:click={reset}><slot name="empty">{fallback}</slot></li>
     {/each}
   </ul>
 </div>
