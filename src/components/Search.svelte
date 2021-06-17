@@ -30,7 +30,7 @@
   }
 
   function isOption() {
-    return list.contains(document.activeElement);
+    return list && list.contains(document.activeElement);
   }
 
   function search(e) {
@@ -58,6 +58,7 @@
       e.preventDefault();
       input.focus();
     }
+    dispatch('close', e);
     isOpen = null;
   }
 
@@ -109,7 +110,6 @@
         isOpen = true;
       }
     } else {
-      if (e.keyCode === 13) reset(e);
       if (e.keyCode === 9) {
         setTimeout(() => {
           if (!isOption()) reset(e, true);
@@ -123,7 +123,7 @@
         e.preventDefault();
         focus(list.querySelector('li:first-child'));
       }
-      if (e.keyCode === 27 && isOption()) reset(e);
+      if (e.keyCode === 13 || e.keyCode === 27) reset(e);
     }
   }
 
