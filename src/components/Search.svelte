@@ -53,6 +53,9 @@
   }
 
   function reset(e, skip) {
+    if (isOption()) {
+      document.activeElement.click();
+    }
     if (!skip) {
       e.stopPropagation();
       e.preventDefault();
