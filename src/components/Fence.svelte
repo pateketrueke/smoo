@@ -83,7 +83,6 @@
   function handleSubmit(e) {
     if (e.target.checkValidity()) {
       dispatch('submit', e);
-      pop(e);
     }
   }
 
