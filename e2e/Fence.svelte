@@ -25,6 +25,17 @@
     <button type="button" on:click={open}>nested</button>
     <button type="submit">close</button>
   </p>
+  <details>
+    <summary>Focus me</summary>
+    OSOM
+  </details>
+  <select>
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+  </select>
+  <a href="/">Just a link</a>
+  <a href="/" tabindex="-1">Just a link</a>
   <div slot="after">
     <Fence modal autofocus bind:visible={sub} on:cancel={open} on:submit={open}>
       <h4>Sub modal</h4>

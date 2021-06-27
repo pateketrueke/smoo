@@ -96,13 +96,14 @@
   $: if (ref) {
     if (visible === false) pop();
     if (visible) {
-      const nodes = ref.querySelectorAll('input,button,textarea');
+      const nodes = ref.querySelectorAll('a,input,select,button,textarea,summary');
       const children = [];
 
       for (let i = 0; i < nodes.length; i += 1) {
         if (nodes[i].getAttribute('nofocus') === '' || nodes[i].dataset.nofocus === '') continue; // eslint-disable-line
         if (nodes[i].tagName === 'INPUT' && nodes[i].type === 'hidden') continue; // eslint-disable-line
         if (nodes[i].readOnly || nodes[i].disabled) continue; // eslint-disable-line
+        if (nodes[i].tabIndex === -1) continue; // eslint-disable-line
         children.push(nodes[i]);
       }
 
