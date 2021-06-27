@@ -96,7 +96,8 @@
   $: if (ref) {
     if (visible === false) pop();
     if (visible) {
-      const nodes = ref.querySelectorAll('a,input,select,button,textarea,summary');
+      const fix = ('netscape' in window) && / rv:/.test(navigator.userAgent) ? '' : ',a'; // skip links on firefox?
+      const nodes = ref.querySelectorAll(`input,select,button,textarea,summary${fix}`);
       const children = [];
 
       for (let i = 0; i < nodes.length; i += 1) {
