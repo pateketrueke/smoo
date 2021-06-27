@@ -20,7 +20,7 @@
   <p><input type="number" readonly /></p>
   <p><textarea disabled>OK</textarea></p>
   <p><input type="search" /></p>
-  <p><input type="text" /></p>
+  <p><input type="text" required /></p>
   <p>
     <button type="button" on:click={open}>nested</button>
     <button type="submit">close</button>

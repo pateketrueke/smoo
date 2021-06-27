@@ -30,8 +30,11 @@
   "keywords": [
     "svelte",
     "modal",
+    "search",
     "svelte-modal",
-    "svelte3-modal"
+    "svelte-search",
+    "svelte3-modal",
+    "svelte3-search"
   ],
   "peerDependencies": {
     "svelte": "3.x"
