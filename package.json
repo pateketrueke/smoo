@@ -2,24 +2,19 @@
   "name": "smoo",
   "version": "0.0.12",
   "description": "Simple Modal or Outlet",
-  "main": "dist/smoo.js",
-  "svelte": "src/main.js",
-  "module": "dist/smoo.es.js",
-  "unpkg": "dist/smoo.min.js",
-  "browser": "dist/smoo.min.js",
+  "svelte": "build/main.js",
   "files": [
-    "src/**",
-    "dist/*"
+    "build/**"
   ],
   "scripts": {
-    "dev": "rollup -c -w",
-    "build": "rollup -c",
-    "serve": "sirv docs --dev --quiet --single --port 8080",
-    "lint": "eslint src e2e",
+    "lint": "eslint --ext js,svelte src e2e",
+    "dev": "npm run build:test -- -w src",
+    "mortero": "mortero -asmoo:./src/main.js -r'**:{filepath/1}' -X{cases,components}",
+    "build:test": "npm run mortero -- e2e -B'**/test.js'",
+    "build": "mortero src -fK -r'**:{filepath/1}' --format esm",
     "prepublishOnly": "NODE_ENV=production npm run build",
-    "pretest": "npm run lint && NODE_ENV=test npm run build",
-    "test": "npm run test:e2e -- ${BROWSER:-chrome:headless} -a 'npm run serve' e2e/cases",
-    "test:e2e": "BASE_URL=http://localhost:8080 testcafe"
+    "test": "npm run build:test && npm run test:e2e",
+    "test:e2e": "BASE_URL=http://localhost:8080 testcafe ${BROWSER:-chrome:headless} -q -a 'npm run dev' e2e/cases"
   },
   "repository": {
     "type": "git",
@@ -45,15 +40,9 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-svelte3": "^3.2.0",
     "eslint-utils": ">=1.4.1",
-    "minimist": ">=1.2.2",
-    "rollup": "^2.8.2",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-svelte": "^7.1.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "serialize-javascript": ">=2.1.1",
-    "sirv-cli": "^1.0.8",
+    "mortero": "^0.0.33",
+    "pug": "^3.0.2",
     "svelte": "^3.38.2",
-    "testcafe": "^1.5.0"
+    "testcafe": "^1.9.4"
   }
 }

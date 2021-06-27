@@ -2,9 +2,8 @@
 *.todo
 .DS_Store
 .nyc_output
-docs/*.map
-docs/*.js
-dist
+cache.json
+build
 chrome
 coverage
 node_modules

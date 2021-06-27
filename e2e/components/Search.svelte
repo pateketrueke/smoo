@@ -1,5 +1,5 @@
 <script>
-  import { Search } from '../src/main';
+  import { Search } from 'smoo';
 
   let users = [
     { id: 1, name: 'Juanito Hace', value: 'j@do.e' },

@@ -1,5 +1,5 @@
 <script>
-  import { Fence } from '../src/main';
+  import { Fence } from 'smoo';
 
   let show;
   let sub;
