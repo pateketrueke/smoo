@@ -1,6 +1,6 @@
 {
   "name": "smoo",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Simple Modal or Outlet",
   "svelte": "build/main.js",
   "files": [
