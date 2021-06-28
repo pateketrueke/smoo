@@ -126,7 +126,7 @@
 </script>
 
 <style>
-  .overlay {
+  .smoo-fence--overlay {
     top: 0;
     left: 0;
     width: 100%;
@@ -139,30 +139,30 @@
     background-color: rgba(0, 0, 0, .3);
   }
 
-  .wrapper {
+  .smoo-fence--wrapper {
     background-color: white;
     box-shadow: 0 2px 3px rgba(0, 0, 0, .2);
   }
 
-  .loading {
+  .smoo-fence--loading {
     opacity: .3;
     pointer-events: none;
   }
 
-  .inline {
+  .smoo-fence--inline {
     display: inline-block;
   }
 
-  form {
+  .smoo-fence--form {
     padding: 10px;
   }
 </style>
 
 {#if visible}
-  <div class={fixedClass} on:click={closeMe} bind:this={ref} role="dialog">
-    <div class="wrapper">
+  <div class="smoo-fence--{fixedClass}" on:click={closeMe} bind:this={ref} role="dialog">
+    <div class="smoo-fence--wrapper">
       <slot name="before" />
-      <form {...fixedProps} on:submit|preventDefault={handleSubmit} class:loading={loading}>
+      <form {...fixedProps} on:submit|preventDefault={handleSubmit} class:smoo-fence--loading={loading} class="smoo-fence--form">
         <slot />
       </form>
       <slot name="after" />

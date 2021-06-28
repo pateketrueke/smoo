@@ -140,8 +140,8 @@
 </script>
 
 <style>
-  .search { position: relative; }
-  .values {
+  .smoo-search--search { position: relative; }
+  .smoo-search--values {
     transform: translateY(-1px);
     list-style-type: none;
     background-color: white;
@@ -151,36 +151,36 @@
     padding: 0;
     margin: 0;
   }
-  .values[open] { display: block; }
-  .option { vertical-align: middle; }
-  .option label { display: flex; align-items: center; }
+  .smoo-search--values[open] { display: block; }
+  .smoo-search--option { vertical-align: middle; }
+  .smoo-search--option label { display: flex; align-items: center; }
 
-  :global(.input svg + input) { padding-left: 1.5em; }
-  :global(.input svg) { position: absolute; top: .2em; height: 1em; }
+  :global(.smoo-search--input svg + input) { padding-left: 1.5em; }
+  :global(.smoo-search--input svg) { position: absolute; top: .2em; height: 1em; }
 </style>
 
-<div role="listbox" class="search" on:keydown={check}>
-  <label for={id} role="search" class="input">
+<div role="listbox" class="smoo-search--search" on:keydown={check}>
+  <label for={id} role="search" class="smoo-search--input">
     <slot name="before" />
     <input
-      type="search" class="field" {disabled} {placeholder} {...fixedProps}
+      type="search" class="smoo-search--field" {disabled} {placeholder} {...fixedProps}
       bind:this={input} on:keyup={search} on:change={search} on:input={sync} on:blur={close} on:mouseup={open} on:focus
     />
     <slot name="after" />
   </label>
-  <ul role="menu" class="values" open={isOpen} bind:this={list} on:mouseenter={set} on:mouseleave={unset}>
+  <ul role="menu" class="smoo-search--values" open={isOpen} bind:this={list} on:mouseenter={set} on:mouseleave={unset}>
     {#each filteredData as item}
-      <li role="menuitem" class="option">
+      <li role="menuitem" class="smoo-search--option">
         <label for="{id}-{pk}-{item[pk]}">
           <input id="{id}-{pk}-{item[pk]}"
             type={fixedType} value={item[pk]} checked={value.includes(item[pk].toString())}
             on:change={select} on:blur={close}
           />
-          <slot {item} name="item"><span class="value">{item[label]}</span></slot>
+          <slot {item} name="item"><span class="smoo-search--value">{item[label]}</span></slot>
         </label>
       </li>
     {:else}
-      <li class="empty" on:click={reset}><slot name="empty">{fallback}</slot></li>
+      <li class="smoo-search--empty" on:click={reset}><slot name="empty">{fallback}</slot></li>
     {/each}
   </ul>
 </div>
