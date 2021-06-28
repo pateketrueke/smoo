@@ -10,7 +10,7 @@ const h3 = Selector('h3');
 const h4 = Selector('h4');
 const pre = Selector('pre');
 const search = Selector('input[type=search]');
-const multiple = Selector('input[type=checkbox]');
+// const multiple = Selector('input[type=checkbox]');
 const button = Selector('button');
 const menuItem = Selector('li[role=menuitem]');
 
