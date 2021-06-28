@@ -60,6 +60,7 @@ Available props:
 - `{class}` &mdash; Used `class` for the inner `<form />` element
 - `{loading}` &mdash; Its presence will protect the UI with `pointer-events:none`
 - `{modal}` &mdash; Its presence will render the inner `<form />` in a modal-overlay
+- `{noform}` &mdash; It disables the `<form />` render, use the `main` slot instead
 - `{visible}` &mdash; Its value is used to toggle the render of the entire custom-element
 - `{autofocus}` &mdash; Its presence enables `focus()` on the first input-element found
 

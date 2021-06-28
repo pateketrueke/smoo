@@ -73,6 +73,7 @@
 
   export let id = '';
   export let modal = false;
+  export let noform = false;
   export let visible = null;
   export let loading = false;
   export let autofocus = false;
@@ -162,9 +163,14 @@
   <div class="smoo-fence--{fixedClass}" on:click={closeMe} bind:this={ref} role="dialog">
     <div class="smoo-fence--wrapper">
       <slot name="before" />
-      <form {...fixedProps} on:submit|preventDefault={handleSubmit} class:smoo-fence--loading={loading} class="smoo-fence--form">
-        <slot />
-      </form>
+
+      <slot name="main" props={fixedProps} />
+      {#if !noform}
+        <form {...fixedProps} on:submit|preventDefault={handleSubmit} class:smoo-fence--loading={loading} class="smoo-fence--form">
+          <slot />
+        </form>
+      {/if}
+
       <slot name="after" />
     </div>
   </div>
