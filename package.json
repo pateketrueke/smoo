@@ -2,17 +2,23 @@
   "name": "smoo",
   "version": "0.0.14",
   "description": "Simple Modal or Outlet",
+  "main": "build/dist/main.js",
+  "module": "build/dist/main.js",
   "svelte": "build/main.js",
   "files": [
-    "build/**"
+    "build/components/*.*",
+    "build/dist/*.js",
+    "build/*.js"
   ],
   "scripts": {
     "lint": "eslint --ext js,svelte src e2e",
     "dev": "npm run build:test -- -w src",
     "mortero": "mortero -asmoo:./src/main.js -r'**:{filepath/1}' -X{cases,components}",
+    "build:module": "npm run mortero -- src -Dbuild/dist -Nsvelte -fB '**/main.js' --format esm",
     "build:test": "npm run mortero -- e2e -B'**/test.js'",
-    "build": "mortero src -fK -r'**:{filepath/1}' --format esm",
-    "prepublishOnly": "rm -rf build/* && NODE_ENV=production npm run build",
+    "build:all": "mortero src -fK -r'**:{filepath/1}' --format esm",
+    "build": "npm run build:all && npm run build:module",
+    "prebuild": "rm -rf build",
     "test": "npm run build:test && npm run test:e2e",
     "test:e2e": "BASE_URL=http://localhost:8080 testcafe ${BROWSER:-chrome:headless} -q -a 'npm run dev' e2e/cases"
   },
@@ -40,7 +46,7 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-svelte3": "^3.2.0",
     "eslint-utils": ">=1.4.1",
-    "mortero": "^0.0.33",
+    "mortero": "^0.0.42",
     "pug": "^3.0.2",
     "svelte": "^3.38.2",
     "testcafe": "^1.9.4"
