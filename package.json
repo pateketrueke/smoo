@@ -19,6 +19,7 @@
     "build:all": "mortero src -fK -r'**:{filepath/1}' --format esm",
     "build": "npm run build:all && npm run build:module",
     "prebuild": "rm -rf build",
+    "prepare": "npm run build",
     "test": "npm run build:test && npm run test:e2e",
     "test:e2e": "BASE_URL=http://localhost:8080 testcafe ${BROWSER:-chrome:headless} -q -a 'npm run dev' e2e/cases"
   },
