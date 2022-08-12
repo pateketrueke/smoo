@@ -97,28 +97,30 @@
   $: if (ref) {
     if (visible === false) pop();
     if (visible) {
-      const fix = ('netscape' in window) && / rv:/.test(navigator.userAgent) ? '' : ',a'; // skip links on firefox?
-      const nodes = ref.querySelectorAll(`input,select,button,textarea,summary${fix}`);
-      const children = [];
+      requestAnimationFrame(() => {
+        const fix = ('netscape' in window) && / rv:/.test(navigator.userAgent) ? '' : ',a'; // skip links on firefox?
+        const nodes = ref.querySelectorAll(`input,select,button,textarea,summary${fix}`);
+        const children = [];
 
-      for (let i = 0; i < nodes.length; i += 1) {
-        if (nodes[i].getAttribute('nofocus') === '' || nodes[i].dataset.nofocus === '') continue; // eslint-disable-line
-        if (nodes[i].tagName === 'INPUT' && nodes[i].type === 'hidden') continue; // eslint-disable-line
-        if (nodes[i].readOnly || nodes[i].disabled) continue; // eslint-disable-line
-        if (nodes[i].tabIndex === -1) continue; // eslint-disable-line
-        children.push(nodes[i]);
-      }
+        for (let i = 0; i < nodes.length; i += 1) {
+          if (nodes[i].getAttribute('nofocus') === '' || nodes[i].dataset.nofocus === '') continue; // eslint-disable-line
+          if (nodes[i].tagName === 'INPUT' && nodes[i].type === 'hidden') continue; // eslint-disable-line
+          if (nodes[i].readOnly || nodes[i].disabled) continue; // eslint-disable-line
+          if (nodes[i].tabIndex === -1) continue; // eslint-disable-line
+          children.push(nodes[i]);
+        }
 
-      const lastNode = children[children.length - 1];
-      const firstNode = children[0];
+        const lastNode = children[children.length - 1];
+        const firstNode = children[0];
 
-      push(ref, closeMe, document.activeElement, firstNode, lastNode, () => loading);
+        push(ref, closeMe, document.activeElement, firstNode, lastNode, () => loading);
 
-      if (autofocus) {
-        setTimeout(() => {
-          if (firstNode && !loading) firstNode.focus();
-        }, 60);
-      }
+        if (autofocus) {
+          setTimeout(() => {
+            if (firstNode && !loading) firstNode.focus();
+          }, 60);
+        }
+      });
     }
   }
 
