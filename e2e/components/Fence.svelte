@@ -27,7 +27,7 @@
   </p>
   <details>
     <summary>Focus me</summary>
-    OSOM
+    <button>OSOM</button>
   </details>
   <select>
     <option>1</option>

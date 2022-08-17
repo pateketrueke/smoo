@@ -1,4 +1,6 @@
 <script context="module">
+  import { tabbable } from 'tabbable';
+
   const STACK = [];
 
   let is;
@@ -14,9 +16,9 @@
     }
   }
 
-  function push(el, close, current, firstElement, lastElement, loadingCallback) {
+  function push(el, close, current, loadingCallback) {
     STACK.push({
-      el, close, current, firstElement, lastElement, loadingCallback,
+      el, close, current, loadingCallback,
     });
   }
 
@@ -40,16 +42,19 @@
 
   function sync(e) {
     if (e.keyCode === 9 && STACK.length) {
-      const { firstElement, lastElement, loadingCallback } = STACK[STACK.length - 1];
+      const { el, loadingCallback } = STACK[STACK.length - 1];
+      const children = tabbable(el);
+      const lastNode = children[children.length - 1];
+      const firstNode = children[0];
 
       if (loadingCallback()) {
         e.preventDefault();
-      } else if (e.shiftKey && e.target === firstElement) {
+      } else if (e.shiftKey && e.target === firstNode) {
         e.preventDefault();
-        lastElement.focus();
-      } else if (!e.shiftKey && e.target === lastElement) {
+        lastNode.focus();
+      } else if (!e.shiftKey && e.target === lastNode) {
         e.preventDefault();
-        firstElement.focus();
+        firstNode.focus();
       }
     }
     if (e.keyCode === 27) {
@@ -98,22 +103,10 @@
     if (visible === false) pop();
     if (visible) {
       requestAnimationFrame(() => {
-        const fix = ('netscape' in window) && / rv:/.test(navigator.userAgent) ? '' : ',a'; // skip links on firefox?
-        const nodes = ref.querySelectorAll(`input,select,button,textarea,summary${fix}`);
-        const children = [];
-
-        for (let i = 0; i < nodes.length; i += 1) {
-          if (nodes[i].getAttribute('nofocus') === '' || nodes[i].dataset.nofocus === '') continue; // eslint-disable-line
-          if (nodes[i].tagName === 'INPUT' && nodes[i].type === 'hidden') continue; // eslint-disable-line
-          if (nodes[i].readOnly || nodes[i].disabled) continue; // eslint-disable-line
-          if (nodes[i].tabIndex === -1) continue; // eslint-disable-line
-          children.push(nodes[i]);
-        }
-
-        const lastNode = children[children.length - 1];
+        const children = tabbable(ref);
         const firstNode = children[0];
 
-        push(ref, closeMe, document.activeElement, firstNode, lastNode, () => loading);
+        push(ref, closeMe, document.activeElement, () => loading);
 
         if (autofocus) {
           setTimeout(() => {
